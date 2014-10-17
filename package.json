@@ -1,0 +1,23 @@
+{
+  "name": "waferpie-sample",
+  "version": "1.0.0",
+  "description": "waferpie-sample ===============",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/s2way/waferpie-sample"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/s2way/waferpie-sample/issues"
+  },
+  "homepage": "https://github.com/s2way/waferpie-sample",
+  "dependencies": {
+    "node-uuid": "^1.4.1",
+    "waferpie": "^0.8.0"
+  }
+}

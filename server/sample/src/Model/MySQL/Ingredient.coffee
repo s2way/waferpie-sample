@@ -17,14 +17,21 @@ class Ingredient
                     ))
             table: 'ingredients'
 
-    removeAll: (callback) -> @_ninja.removeAll(callback)
+    removeAll: (callback) ->
+        @_ninja.removeAll(callback)
 
-    removeById: (id, callback) -> @_ninja.removeById id, callback
+    removeById: (id, callback) ->
+        @_ninja.removeById id, callback
 
-    save: (data, callback) -> @_ninja.save data, callback
+    save: (data, callback) ->
+        @_ninja.save
+            data: data
+            callback: callback
 
-    findById: (id, callback) -> @_ninja.findById id, callback
+    findById: (id, callback) ->
+        @_ninja.findById id, callback
 
-    findAll: (callback) -> @_ninja.findAll callback
+    findAll: (callback) ->
+        @_ninja.findAll callback
 
 module.exports = Ingredient

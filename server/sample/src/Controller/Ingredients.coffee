@@ -37,16 +37,19 @@ class Ingredients
         if id
             @_ingredient.findById(id, (error, result) =>
                 return callback(@_handleError error) if error
-                @statusCode = 404 ; callback(name: 'NotFound') if result is null
+                if result is null
+                    @statusCode = 404
+                    return callback(name: 'NotFound')
                 callback result
             )
             return
 
-        @_ingredient.findAll(callback: (error, results) =>
-            return callback(@_handleError error) if error
-            callback
-                count: results.length
-                data: results
+        @_ingredient.findAll(
+            callback: (error, results) =>
+                return callback(@_handleError error) if error
+                callback
+                    count: results.length
+                    data: results
         )
 
 module.exports = Ingredients

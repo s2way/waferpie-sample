@@ -1,28 +1,56 @@
 {
-  "name": "waferpie-sample",
-  "version": "1.0.0",
-  "description": "waferpie-sample ===============",
-  "main": "index.js",
-  "scripts": {
-    "pretest": "coffeelint server",
-    "test": "mocha server/sample/test --recursive -R spec --compilers coffee:coffee-script/register",
-    "posttest": "mocha server/sample/test --recursive -R html-cov -r blanket --compilers coffee:coffee-script/register > report.html"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/s2way/waferpie-sample"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/s2way/waferpie-sample/issues"
-  },
-  "homepage": "https://github.com/s2way/waferpie-sample",
-  "dependencies": {
-    "node-uuid": "^1.4.1",
-    "waferpie": "^0.8.0"
-  },
-  "devDependencies": {
-    "expect.js": "^0.3.1"
-  }
+    "name": "waferpie-sample",
+    "version": "1.0.0",
+    "description": "waferpie-sample",
+    "main": "server/sample/index.coffee",
+    "scripts": {
+        "pretest": "rm -rf dist ; mkdir -p dist ; (cp -r server/* dist/ && find dist -type f ! -iname '*.js' -delete) ; node_modules/.bin/coffee --compile --output dist server ; node_modules/.bin/coffeelint server",
+        "test": "node_modules/.bin/mocha server/sample/test --recursive -R progress --compilers coffee:coffee-script/register ; node_modules/.bin/mocha dist/sample/test --recursive -R html-cov -r blanket --compilers coffee:coffee-script/register > report.html",
+        "posttest": "node_modules/.bin/mocha dist/sample/test --recursive -r blanket -R mocha-cov-reporter --compilers coffee:coffee-script/register"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/s2way/waferpie-sample"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/s2way/waferpie-sample/issues"
+    },
+    "homepage": "https://github.com/s2way/waferpie-sample",
+    "dependencies": {
+        "node-uuid": "^1.4.1",
+        "waferpie": "^0.8.0"
+    },
+    "devDependencies": {
+        "blanket": "^1.1.6",
+        "coffee-script": "^1.8.0",
+        "coffeelint": "^1.6.0",
+        "expect.js": "^0.3.1",
+        "grunt": "^0.4.5",
+        "grunt-contrib-watch": "^0.6.1",
+        "grunt-exec": "^0.4.6",
+        "grunt-jslint": "^1.1.12",
+        "grunt-mocha-test": "^0.11.0",
+        "jslint": "^0.5.2",
+        "karma": "^0.12.21",
+        "karma-coverage": "^0.2.6",
+        "karma-mocha": "^0.1.7",
+        "load-grunt-tasks": "^0.6.0",
+        "mocha": "1.13.0",
+        "mocha-cov-reporter": "^1.1.1",
+        "should": "^4.0.4",
+        "travis-cov": "^0.2.5"
+    },
+    "config": {
+        "blanket": {
+            "pattern": "sample",
+            "data-cover-never": "node_modules"
+        },
+        "mocha-cov-reporter": {
+            "failOnError" : true,
+            "threshold": 95,
+            "useColors" : true
+        }
+    }
 }

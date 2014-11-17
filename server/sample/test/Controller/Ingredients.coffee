@@ -7,35 +7,40 @@ describe 'Ingredients', ->
     testing = null
 
     beforeEach ->
-        testing = new Testing path.join(__dirname, '../../../sample/')
+        testing = new Testing path.join(__dirname, '../../../sample/'), currentDataSource: 'MySQL'
 
     describe 'get', ->
 
         it 'should return all ingredients if no parameter is passed', (done) ->
-            results = {}
-            testing.mockModel 'MySQL.Ingredient',
+            results = []
+            mock =
                 init: -> return
-                findAll: (callback) ->
-                    callback(null, results)
+                mocked: true
+                findAll: (params) ->
+                    params.callback(null, results)
+
+            testing.mockModel 'MySQL.Ingredient', mock
+
             testing.callController 'Ingredients', 'get', {}, (body, info) ->
-                expect(body).to.be results
+                expect(body.count).to.be 0
+                expect(body.data).to.be results
                 expect(info.statusCode).to.be 200
                 done()
 
         it 'should return a single ingredient if the id is supplied', (done) ->
-            try
-                result = {}
-                testing.mockModel 'MySQL.Ingredient',
-                    init: -> return
-                    findByKey: (id, callback) ->
-                        expect(id).to.be '1'
-                        callback(null, result)
-                testing.callController 'Ingredients', 'get', segments: ['1'], (body, info) ->
-                    expect(body).to.be result
-                    expect(info.statusCode).to.be 200
-                    done()
-            catch e
-                console.log e, e.stack
+            result = {}
+            mock =
+                init: -> return
+                findById: (id, callback) ->
+                    expect(id).to.be '1'
+                    callback(null, result)
+
+            testing.mockModel 'MySQL.Ingredient', mock
+
+            testing.callController 'Ingredients', 'get', segments: ['1'], (body, info) ->
+                expect(body).to.be result
+                expect(info.statusCode).to.be 200
+                done()
 
     describe 'put', ->
 

@@ -1,42 +1,65 @@
 class Ingredients
-    _handleError: (error) ->
+    handleError: (error) ->
         @statusCode = 500
         return {
             'error' : error
         }
 
     before: (callback) ->
-        @_ingredient = @model(@core.currentDataSource + '.Ingredient')
+        @ingredient = @model(@core.currentDataSource + '.Ingredient')
         callback true
 
     delete: (callback) ->
         id = @segments[0]
 
         if id is 'all'
-            @_ingredient.removeAll((error, response) =>
-                return callback(@_handleError error) if error
-                callback response
+            @ingredient.removeAll((error) =>
+                return callback(@handleError error) if error
+                callback({})
             )
         else
-            @_ingredient.removeById(id, (error) =>
-                return callback(@_handleError error) if error
+            @ingredient.removeById(id, (error) =>
+                return callback(@handleError error) if error
                 callback({})
             )
 
+    put: (callback) ->
+        id = @segments[0] ? 0
+        if id is 0
+            @statusCode = 404
+            callback({})
+
+        @ingredient.findById id, (error, result) =>
+            return callback(@handleError error) if error
+
+            if result is null
+                @statusCode = 404
+                return callback({})
+
+            data = @payload
+            data['id'] = id
+
+            @ingredient.save
+                data: data
+                callback: (error, result) =>
+                    return callback(@handleError error) if error
+                    callback result
+
     post: (callback) ->
         delete @payload['id']
-        @_ingredient.save(
+        @ingredient.save(
             data: @payload,
             callback: (error, data) =>
-                return callback(@_handleError error) if error
+                return callback(@handleError error) if error
+                @statusCode = 201
                 callback data
         )
 
     get: (callback) ->
         id = @segments[0]
         if id
-            @_ingredient.findById(id, (error, result) =>
-                return callback(@_handleError error) if error
+            @ingredient.findById(id, (error, result) =>
+                return callback(@handleError error) if error
                 if result is null
                     @statusCode = 404
                     return callback(name: 'NotFound')
@@ -44,9 +67,9 @@ class Ingredients
             )
             return
 
-        @_ingredient.findAll(
+        @ingredient.findAll(
             callback: (error, results) =>
-                return callback(@_handleError error) if error
+                return callback(@handleError error) if error
                 callback
                     count: results.length
                     data: results

@@ -42,15 +42,101 @@ describe 'Ingredients', ->
                 expect(info.statusCode).to.be 200
                 done()
 
+        it 'should return 404 if the id was supplied and the record was not found', (done) ->
+            mock =
+                init: -> return
+                findById: (id, callback) ->
+                    callback(null, null)
+
+            testing.mockModel 'MySQL.Ingredient', mock
+            testing.callController 'Ingredients', 'get', segments: ['1'], (body, info) ->
+                expect(body).to.be.ok()
+                expect(info.statusCode).to.be 404
+                done()
+
     describe 'put', ->
 
-        it 'should update an ingredient'
+        record = name: 'Tomato'
+
+        it 'should update an ingredient by id if the record was found', (done) ->
+            mock =
+                init: -> return
+                findById: (id, callback) ->
+                    callback(null, record)
+                save: (params) ->
+                    expect(params.data.id).to.be '1'
+                    expect(params.data.name).to.be 'Tomato'
+                    params.callback(null, record)
+
+            testing.mockModel 'MySQL.Ingredient', mock
+            testing.callController 'Ingredients', 'put',
+                segments: ['1']
+                payload: record
+            , (body, info) ->
+                expect(body.id).to.be '1'
+                expect(body.name).to.be 'Tomato'
+                expect(info.statusCode).to.be 200
+                done()
+
+        it 'should return 404 if the resource was not found', (done) ->
+            mock =
+                init: -> return
+                findById: (id, callback) ->
+                    callback(null, null)
+
+            testing.mockModel 'MySQL.Ingredient', mock
+            testing.callController 'Ingredients', 'put',
+                segments: ['1']
+                payload: record
+            , (body, info) ->
+                expect(body).to.be.ok()
+                expect(info.statusCode).to.be 404
+                done()
 
     describe 'post', ->
 
-        it 'should create a new ingredient'
+        it 'should create a new ingredient it the validation passes', (done) ->
+            record =
+                name: 'Tomato'
+            mock =
+                init: -> return
+                save: (params) ->
+                    expect(params.data).to.be record
+                    params.callback(null, {})
+
+            testing.mockModel 'MySQL.Ingredient', mock
+
+            testing.callController 'Ingredients', 'post', payload: record, (body, info) ->
+                expect(body).to.be.ok()
+                expect(info.statusCode).to.be 201
+                done()
 
     describe 'delete', ->
 
-        it 'should remove an ingredient by id'
+        it 'should remove an ingredient by id if the it is supplied', (done) ->
+            mock =
+                init: -> return
+                removeById: (id, callback) ->
+                    expect(id).to.be '1'
+                    callback(null, {})
+
+            testing.mockModel 'MySQL.Ingredient', mock
+
+            testing.callController 'Ingredients', 'delete', segments: ['1'], (body, info) ->
+                expect(body).to.be.ok()
+                expect(info.statusCode).to.be 200
+                done()
+
+        it 'should all ingredients if /all is passed', (done) ->
+            mock =
+                init: -> return
+                removeAll: (callback) ->
+                    callback(null)
+
+            testing.mockModel 'MySQL.Ingredient', mock
+
+            testing.callController 'Ingredients', 'delete', segments: ['all'], (body, info) ->
+                expect(body).to.be.ok()
+                expect(info.statusCode).to.be 200
+                done()
 

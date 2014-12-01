@@ -1,9 +1,9 @@
 class Ingredients
     handleError: (error) ->
         @statusCode = 500
-        return {
-            'error' : error
-        }
+        return error: error
+
+    timeout: ->
 
     before: (callback) ->
         @ingredient = @model(@core.currentDataSource + '.Ingredient')
@@ -24,14 +24,17 @@ class Ingredients
             )
 
     put: (callback) ->
-        id = @segments[0] ? 0
-        if id is 0
-            @statusCode = 404
-            callback({})
+
+        if @payload is null or typeof @payload isnt 'object'
+            return callback(@handleError message: 'Invalid payload')
+
+        id = parseInt(@segments[0])
+        if isNaN(id)
+            @statusCode = 400
+            return callback(error: 'Invalid id')
 
         @ingredient.findById id, (error, result) =>
             return callback(@handleError error) if error
-
             if result is null
                 @statusCode = 404
                 return callback({})

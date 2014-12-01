@@ -44,7 +44,7 @@
     },
     "config": {
         "blanket": {
-            "pattern": "sample",
+            "pattern": "sample/src",
             "data-cover-never": "node_modules"
         },
         "mocha-cov-reporter": {

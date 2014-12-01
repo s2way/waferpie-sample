@@ -2,7 +2,7 @@ Testing = require('waferpie').Testing
 path = require 'path'
 expect = require 'expect.js'
 
-describe 'Ingredients', ->
+describe 'Recipes', ->
 
     testing = null
 
@@ -11,7 +11,7 @@ describe 'Ingredients', ->
 
     describe 'get', ->
 
-        it 'should return all ingredients if no parameter is passed', (done) ->
+        it 'should return all recipes if no parameter is passed', (done) ->
             results = []
             mock =
                 init: -> return
@@ -19,9 +19,9 @@ describe 'Ingredients', ->
                 findAll: (params) ->
                     params.callback(null, results)
 
-            testing.mockModel 'MySQL.Ingredient', mock
+            testing.mockModel 'MySQL.Recipe', mock
 
-            testing.callController 'Ingredients', 'get', {}, (body, info) ->
+            testing.callController 'Recipes', 'get', {}, (body, info) ->
                 expect(body.count).to.be 0
                 expect(body.data).to.be results
                 expect(info.statusCode).to.be 200
@@ -35,9 +35,9 @@ describe 'Ingredients', ->
                     expect(id).to.be '1'
                     callback(null, result)
 
-            testing.mockModel 'MySQL.Ingredient', mock
+            testing.mockModel 'MySQL.Recipe', mock
 
-            testing.callController 'Ingredients', 'get', segments: ['1'], (body, info) ->
+            testing.callController 'Recipes', 'get', segments: ['1'], (body, info) ->
                 expect(body).to.be result
                 expect(info.statusCode).to.be 200
                 done()
@@ -48,8 +48,8 @@ describe 'Ingredients', ->
                 findById: (id, callback) ->
                     callback(null, null)
 
-            testing.mockModel 'MySQL.Ingredient', mock
-            testing.callController 'Ingredients', 'get', segments: ['1'], (body, info) ->
+            testing.mockModel 'MySQL.Recipe', mock
+            testing.callController 'Recipes', 'get', segments: ['1'], (body, info) ->
                 expect(body).to.be.ok()
                 expect(info.statusCode).to.be 404
                 done()
@@ -64,16 +64,16 @@ describe 'Ingredients', ->
                 findById: (id, callback) ->
                     callback(null, record)
                 save: (params) ->
-                    expect(params.data.id).to.be '1'
+                    expect(params.data.id).to.be 1
                     expect(params.data.name).to.be 'Tomato'
                     params.callback(null, record)
 
-            testing.mockModel 'MySQL.Ingredient', mock
-            testing.callController 'Ingredients', 'put',
+            testing.mockModel 'MySQL.Recipe', mock
+            testing.callController 'Recipes', 'put',
                 segments: ['1']
                 payload: record
             , (body, info) ->
-                expect(body.id).to.be '1'
+                expect(body.id).to.be 1
                 expect(body.name).to.be 'Tomato'
                 expect(info.statusCode).to.be 200
                 done()
@@ -84,13 +84,46 @@ describe 'Ingredients', ->
                 findById: (id, callback) ->
                     callback(null, null)
 
-            testing.mockModel 'MySQL.Ingredient', mock
-            testing.callController 'Ingredients', 'put',
+            testing.mockModel 'MySQL.Recipe', mock
+            testing.callController 'Recipes', 'put',
                 segments: ['1']
                 payload: record
             , (body, info) ->
                 expect(body).to.be.ok()
                 expect(info.statusCode).to.be 404
+                done()
+
+        it 'should return 404 if the id is not valid', (done) ->
+            testing.mockModel 'MySQL.Recipe', init: -> return
+            testing.callController 'Recipes', 'put',
+                segments: ['not a number!']
+                payload: record
+            , (body, info) ->
+                expect(body.error).to.be.ok()
+                expect(info.statusCode).to.be 400
+                done()
+
+        it 'should save an recipe/ingredient if the ingredient id is passed after the id', (done) ->
+            record =
+                quantity: 3
+            mock =
+                init: -> return
+                save: (params) ->
+                    expect(params.data).to.eql
+                        recipe_id: 1
+                        ingredient_id: 2
+                        quantity: 3
+                    params.callback(null, {})
+
+            options =
+                payload: record
+                segments: ['1', '2']
+
+            testing.mockModel 'MySQL.RecipeIngredient', mock
+
+            testing.callController 'Recipes', 'put', options, (body, info) ->
+                expect(body).to.be.ok()
+                expect(info.statusCode).to.be 201
                 done()
 
     describe 'post', ->
@@ -104,12 +137,13 @@ describe 'Ingredients', ->
                     expect(params.data).to.be record
                     params.callback(null, {})
 
-            testing.mockModel 'MySQL.Ingredient', mock
+            testing.mockModel 'MySQL.Recipe', mock
 
-            testing.callController 'Ingredients', 'post', payload: record, (body, info) ->
+            testing.callController 'Recipes', 'post', payload: record, (body, info) ->
                 expect(body).to.be.ok()
                 expect(info.statusCode).to.be 201
                 done()
+
 
     describe 'delete', ->
 
@@ -120,22 +154,22 @@ describe 'Ingredients', ->
                     expect(id).to.be '1'
                     callback(null, {})
 
-            testing.mockModel 'MySQL.Ingredient', mock
+            testing.mockModel 'MySQL.Recipe', mock
 
-            testing.callController 'Ingredients', 'delete', segments: ['1'], (body, info) ->
+            testing.callController 'Recipes', 'delete', segments: ['1'], (body, info) ->
                 expect(body).to.be.ok()
                 expect(info.statusCode).to.be 200
                 done()
 
-        it 'should all ingredients if /all is passed', (done) ->
+        it 'should all recipes if /all is passed', (done) ->
             mock =
                 init: -> return
                 removeAll: (callback) ->
                     callback(null)
 
-            testing.mockModel 'MySQL.Ingredient', mock
+            testing.mockModel 'MySQL.Recipe', mock
 
-            testing.callController 'Ingredients', 'delete', segments: ['all'], (body, info) ->
+            testing.callController 'Recipes', 'delete', segments: ['all'], (body, info) ->
                 expect(body).to.be.ok()
                 expect(info.statusCode).to.be 200
                 done()

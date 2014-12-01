@@ -88,21 +88,26 @@ class Recipes
     get: (callback) ->
         id = @segments[0]
         if id
-            @recipe.findById(id, (error, result) =>
+            @recipe.findById(id, (error, recipe) =>
                 return callback(@handleError error) if error
-                if result is null
+                if recipe is null
                     @statusCode = 404
                     return callback(name: 'NotFound')
-                callback result
+
+                @recipe.findIngredientsByRecipeId(id, (error, ingredients) =>
+                    return callback(@handleError error) if error
+                    recipe.ingredients = ingredients
+                    callback recipe
+                )
             )
             return
 
-        @recipe.findAll(
-            callback: (error, results) =>
-                return callback(@handleError error) if error
-                callback
-                    count: results.length
-                    data: results
+        @recipe.findAllWithIngredients((error, recipes) =>
+            return callback(@handleError error) if error
+
+            callback
+                count: recipes.length
+                data: recipes
         )
 
 module.exports = Recipes

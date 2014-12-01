@@ -7,7 +7,7 @@ describe 'Recipes', ->
     testing = null
 
     beforeEach ->
-        testing = new Testing path.join(__dirname, '../../../sample/'), currentDataSource: 'MySQL'
+        testing = new Testing path.join(__dirname, '../../../kitchen-coffee/'), currentDataSource: 'MySQL'
 
     describe 'get', ->
 
@@ -16,6 +16,8 @@ describe 'Recipes', ->
             mock =
                 init: -> return
                 mocked: true
+                query: (query, callback) ->
+                    callback(null, [])
                 findAll: (params) ->
                     params.callback(null, results)
 
@@ -31,6 +33,8 @@ describe 'Recipes', ->
             result = {}
             mock =
                 init: -> return
+                query: (query, params, callback) ->
+                    callback(null, [])
                 findById: (id, callback) ->
                     expect(id).to.be '1'
                     callback(null, result)
@@ -120,6 +124,14 @@ describe 'Recipes', ->
                 segments: ['1', '2']
 
             testing.mockModel 'MySQL.RecipeIngredient', mock
+            testing.mockModel 'MySQL.Ingredient',
+                init: ->
+                findById: (id, callback) -> callback null, {}
+            testing.mockModel 'MySQL.Recipe',
+                init: ->
+                findById: (id, callback) ->
+                    callback null, {}
+
 
             testing.callController 'Recipes', 'put', options, (body, info) ->
                 expect(body).to.be.ok()

@@ -7,7 +7,7 @@ describe 'Ingredients', ->
     testing = null
 
     beforeEach ->
-        testing = new Testing path.join(__dirname, '../../../sample/'), currentDataSource: 'MySQL'
+        testing = new Testing path.join(__dirname, '../../../kitchen-coffee/'), currentDataSource: 'MySQL'
 
     describe 'get', ->
 

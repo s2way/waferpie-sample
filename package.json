@@ -2,11 +2,11 @@
     "name": "waferpie-sample",
     "version": "1.0.0",
     "description": "waferpie-sample",
-    "main": "server/sample/index.coffee",
+    "main": "server/kitchen-coffee/index.coffee",
     "scripts": {
         "pretest": "rm -rf dist ; mkdir -p dist ; (cp -r server/* dist/ && find dist -type f ! -iname '*.js' -delete) ; node_modules/.bin/coffee --compile --output dist server ; node_modules/.bin/coffeelint server",
-        "test": "node_modules/.bin/mocha server/sample/test --recursive -R progress --compilers coffee:coffee-script/register ; node_modules/.bin/mocha dist/sample/test --recursive -R html-cov -r blanket --compilers coffee:coffee-script/register > report.html",
-        "posttest": "node_modules/.bin/mocha dist/sample/test --recursive -r blanket -R mocha-cov-reporter --compilers coffee:coffee-script/register"
+        "test": "node_modules/.bin/mocha server/kitchen-coffee/test --recursive -R progress --compilers coffee:coffee-script/register ; node_modules/.bin/mocha dist/kitchen-coffee/test --recursive -R html-cov -r blanket --compilers coffee:coffee-script/register > report.html",
+        "posttest": "node_modules/.bin/mocha dist/kitchen-coffee/test --recursive -r blanket -R mocha-cov-reporter --compilers coffee:coffee-script/register"
     },
     "repository": {
         "type": "git",

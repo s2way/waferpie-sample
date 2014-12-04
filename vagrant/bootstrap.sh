@@ -12,6 +12,7 @@ cd /home/vagrant/
 git clone https://github.com/s2way/waferpie.git
 cd waferpie
 npm install
+chown -R vagrant:vagrant /home/vagrant/waferpie
 cd /vagrant
 rm -rf node_modules/waferpie
 ln -s /home/vagrant/waferpie /vagrant/node_modules/waferpie

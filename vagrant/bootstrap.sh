@@ -5,6 +5,7 @@ sudo yum install -y gcc-c++ make
 sudo yum install -y npm
 sudo yum install -y git
 npm install -g nodemon
+npm install -g coffee-script
 cd /vagrant
 npm install
 cd /home/vagrant/

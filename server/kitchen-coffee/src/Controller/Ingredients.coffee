@@ -8,6 +8,7 @@ class Ingredients
     before: (callback) ->
         @ingredient = @model(@core.currentDataSource + '.Ingredient')
         @responseHeaders['Access-Control-Allow-Origin'] = '*'
+        @responseHeaders['Access-Control-Allow-Headers'] = 'Content-Type'
         callback true
 
     delete: (callback) ->

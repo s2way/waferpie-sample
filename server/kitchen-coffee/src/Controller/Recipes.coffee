@@ -10,6 +10,7 @@ class Recipes
         @ingredient = @model "#{@core.currentDataSource}.Ingredient"
         @recipeIngredient = @model "#{@core.currentDataSource}.RecipeIngredient"
         @responseHeaders['Access-Control-Allow-Origin'] = '*'
+        @responseHeaders['Access-Control-Allow-Headers'] = 'Content-Type'
         callback true
 
     delete: (callback) ->

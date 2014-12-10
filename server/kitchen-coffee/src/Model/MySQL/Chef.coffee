@@ -1,39 +1,31 @@
-chef1 = id: 1, name: 'Josh', weight: '150kg'
-chef2 = id: 2, name: 'Jonny', weight: '60kg'
-
 class Chef
 
-    save: (data, callback) ->
-        # Salva dados
-        chance = Math.floor((Math.random() * 10) + 1) > 5;
-        if chance
-            callback error : 'Weird error'
-        else 
-            callback id : 1
+    init : ->
+        options = 
+            table : 'chef'
+            dataSourceName : 'MySQL'
+            validate :
+                name : 
+                    notEmpty :
+                        rule : 'notEmpty'
+                        message : 'Name cannot be empty you stupid motherfucker'
+                        required : true
+                specialities :
+                    isString : 
+                        rule : 'isString'
+                        message : 'This field is a string, asshole'
+                        required : true
+                weight :
+                    min : 
+                        rule : 'min'
+                        params : [20]
+                        message : 'This chef is too skinny'
+                    max : 
+                        rule : 'max'
+                        params : [150]
+                        message : 'Yo mama is so fat'
 
-    findAll: (callback) ->
-        # Busca no banco de dados
-        chance = Math.floor((Math.random() * 10) + 1) > 5;
-        if chance
-            callback error : 'Weird error'
-        else 
-            callback null, [chef1, chef2]
-
-    removeById: (id, callback) ->
-        # Remove por id no banco de dados
-        chance = Math.floor((Math.random() * 10) + 1) > 5;
-        if chance
-            callback error : 'Weird error'
-        else 
-            callback null
-
-    findById: (id, callback) ->
-        # Busca por id no banco de dados
-        chance = Math.floor((Math.random() * 10) + 1) > 5;
-        if chance
-            callback error : 'Weird error'
-        else 
-            callback null, chef1
-
+        @ninja = @component 'Database.MyNinja', options
+        @ninja.bind @
 
 module.exports = Chef

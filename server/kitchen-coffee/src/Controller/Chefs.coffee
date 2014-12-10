@@ -10,12 +10,13 @@ class Chefs
         model = @model 'MySQL.Chef'
 
         if id is null
-            model.findAll (err, data) =>
-                if err
-                    @statusCode = 500
-                    callback err
-                else
-                    callback data
+            model.findAll 
+                callback : (err, data) =>
+                    if err
+                        @statusCode = 500
+                        callback err
+                    else
+                        callback data
         else 
             model.findById 1, (err, data) =>
                 if err
@@ -33,13 +34,15 @@ class Chefs
         if payload is null
             callback error : 'No data to be saved'
         else
-            model.save payload, (err, result) =>
-                if err
-                    @statusCode = 500
-                    callback err
-                else
-                    @statusCode = 201
-                    callback result
+            model.save 
+                data : payload
+                callback : (err, result) =>
+                    if err
+                        @statusCode = 500
+                        callback err
+                    else
+                        @statusCode = 201
+                        callback result
 
     delete : (callback) ->
 

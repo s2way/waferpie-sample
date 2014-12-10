@@ -1,6 +1,6 @@
 class Logger
 
-    after: (callback) ->
+    before: (callback) ->
         log = @model 'MySQL.Log'
 
         data =
@@ -15,8 +15,7 @@ class Logger
             params: JSON.stringify(@params)
 
         log.save data, (error) ->
-            console.log error
+            if error then callback(error : error) else callback()
 
-        callback()
 
 module.exports = Logger

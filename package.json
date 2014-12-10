@@ -46,13 +46,16 @@
     },
     "config": {
         "blanket": {
-            "pattern": "sample/src",
+            "pattern": "dist/kitchen-coffee/src",
             "data-cover-never": "node_modules"
         },
         "mocha-cov-reporter": {
             "failOnError": true,
             "threshold": 95,
             "useColors": true
+        },
+        "data-cover-reporter-options": {
+            "shortnames": true
         }
     }
 }

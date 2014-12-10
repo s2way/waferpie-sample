@@ -38,6 +38,7 @@ class Chefs
                     @statusCode = 500
                     callback err
                 else
+                    @statusCode = 201
                     callback result
 
     delete : (callback) ->

@@ -30,5 +30,3 @@ describe 'Ingredient', ->
                                 required: true
                     expect(result).not.to.be.ok()
                     done()
-
-

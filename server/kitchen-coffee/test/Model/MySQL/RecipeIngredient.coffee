@@ -31,5 +31,3 @@ describe 'RecipeIngredient', ->
                             max: params: [1000], required: true
                     expect(result).not.to.be.ok()
                     done()
-
-

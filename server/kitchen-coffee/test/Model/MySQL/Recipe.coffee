@@ -66,4 +66,3 @@ describe 'Recipe', ->
                 expect(results[1].ingredients).to.be.an('object')
                 done()
             )
-

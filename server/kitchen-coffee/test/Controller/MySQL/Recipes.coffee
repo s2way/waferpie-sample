@@ -185,4 +185,3 @@ describe 'Recipes', ->
                 expect(body).to.be.ok()
                 expect(info.statusCode).to.be 200
                 done()
-

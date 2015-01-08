@@ -11,7 +11,7 @@ dataSources:
         host: "localhost"
         port: "8091"
         bucket: "default"
-        n1qlHost: "localhost"
+        n1qlHost: "127.0.0.1"
         n1qlPort: "8093"
 
     MySQL:

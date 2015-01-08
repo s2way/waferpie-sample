@@ -1,12 +1,12 @@
 class Ingredients
     handleError: (error) ->
         @statusCode = 500
-        return error: error
+        return error: error, toString: error.toString()
 
     timeout: ->
 
     before: (callback) ->
-        @ingredient = @model(@core.currentDataSource + '.Ingredient')
+        @ingredient = @model('Couchbase.Ingredient')
         @responseHeaders['Access-Control-Allow-Origin'] = '*'
         @responseHeaders['Access-Control-Allow-Headers'] = 'Content-Type'
         callback true

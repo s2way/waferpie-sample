@@ -7,7 +7,7 @@ describe 'Ingredients', ->
     testing = null
 
     beforeEach ->
-        testing = new Testing path.join(__dirname, '../../../kitchen-coffee/'), currentDataSource: 'MySQL'
+        testing = new Testing path.join(__dirname, '../../../kitchen-coffee/')
 
     describe 'get', ->
 
@@ -19,9 +19,9 @@ describe 'Ingredients', ->
                 findAll: (params) ->
                     params.callback(null, results)
 
-            testing.mockModel 'MySQL.Ingredient', mock
+            testing.mockModel 'Couchbase.Ingredient', mock
 
-            testing.callController 'Ingredients', 'get', {}, (body, info) ->
+            testing.callController 'Couchbase.Ingredients', 'get', {}, (body, info) ->
                 expect(body.count).to.be 0
                 expect(body.data).to.be results
                 expect(info.statusCode).to.be 200
@@ -35,9 +35,9 @@ describe 'Ingredients', ->
                     expect(id).to.be '1'
                     callback(null, result)
 
-            testing.mockModel 'MySQL.Ingredient', mock
+            testing.mockModel 'Couchbase.Ingredient', mock
 
-            testing.callController 'Ingredients', 'get', segments: ['1'], (body, info) ->
+            testing.callController 'Couchbase.Ingredients', 'get', segments: ['1'], (body, info) ->
                 expect(body).to.be result
                 expect(info.statusCode).to.be 200
                 done()
@@ -48,8 +48,8 @@ describe 'Ingredients', ->
                 findById: (id, callback) ->
                     callback(null, null)
 
-            testing.mockModel 'MySQL.Ingredient', mock
-            testing.callController 'Ingredients', 'get', segments: ['1'], (body, info) ->
+            testing.mockModel 'Couchbase.Ingredient', mock
+            testing.callController 'Couchbase.Ingredients', 'get', segments: ['1'], (body, info) ->
                 expect(body).to.be.ok()
                 expect(info.statusCode).to.be 404
                 done()
@@ -68,8 +68,8 @@ describe 'Ingredients', ->
                     expect(params.data.name).to.be 'Tomato'
                     params.callback(null, record)
 
-            testing.mockModel 'MySQL.Ingredient', mock
-            testing.callController 'Ingredients', 'put',
+            testing.mockModel 'Couchbase.Ingredient', mock
+            testing.callController 'Couchbase.Ingredients', 'put',
                 segments: ['1']
                 payload: record
             , (body, info) ->
@@ -84,8 +84,8 @@ describe 'Ingredients', ->
                 findById: (id, callback) ->
                     callback(null, null)
 
-            testing.mockModel 'MySQL.Ingredient', mock
-            testing.callController 'Ingredients', 'put',
+            testing.mockModel 'Couchbase.Ingredient', mock
+            testing.callController 'Couchbase.Ingredients', 'put',
                 segments: ['1']
                 payload: record
             , (body, info) ->
@@ -94,8 +94,8 @@ describe 'Ingredients', ->
                 done()
 
         it 'should return 404 if the id is not valid', (done) ->
-            testing.mockModel 'MySQL.Ingredient', init: -> return
-            testing.callController 'Ingredients', 'put',
+            testing.mockModel 'Couchbase.Ingredient', init: -> return
+            testing.callController 'Couchbase.Ingredients', 'put',
                 segments: ['not a number!']
                 payload: record
             , (body, info) ->
@@ -114,9 +114,9 @@ describe 'Ingredients', ->
                     expect(params.data).to.be record
                     params.callback(null, {})
 
-            testing.mockModel 'MySQL.Ingredient', mock
+            testing.mockModel 'Couchbase.Ingredient', mock
 
-            testing.callController 'Ingredients', 'post', payload: record, (body, info) ->
+            testing.callController 'Couchbase.Ingredients', 'post', payload: record, (body, info) ->
                 expect(body).to.be.ok()
                 expect(info.statusCode).to.be 201
                 done()
@@ -130,9 +130,9 @@ describe 'Ingredients', ->
                     expect(id).to.be '1'
                     callback(null, {})
 
-            testing.mockModel 'MySQL.Ingredient', mock
+            testing.mockModel 'Couchbase.Ingredient', mock
 
-            testing.callController 'Ingredients', 'delete', segments: ['1'], (body, info) ->
+            testing.callController 'Couchbase.Ingredients', 'delete', segments: ['1'], (body, info) ->
                 expect(body).to.be.ok()
                 expect(info.statusCode).to.be 200
                 done()
@@ -143,9 +143,9 @@ describe 'Ingredients', ->
                 removeAll: (callback) ->
                     callback(null)
 
-            testing.mockModel 'MySQL.Ingredient', mock
+            testing.mockModel 'Couchbase.Ingredient', mock
 
-            testing.callController 'Ingredients', 'delete', segments: ['all'], (body, info) ->
+            testing.callController 'Couchbase.Ingredients', 'delete', segments: ['all'], (body, info) ->
                 expect(body).to.be.ok()
                 expect(info.statusCode).to.be 200
                 done()

@@ -6,9 +6,9 @@ class Recipes
     timeout: ->
 
     before: (callback) ->
-        @recipe = @model "#{@core.currentDataSource}.Recipe"
-        @ingredient = @model "#{@core.currentDataSource}.Ingredient"
-        @recipeIngredient = @model "#{@core.currentDataSource}.RecipeIngredient"
+        @recipe = @model 'Couchbase.Recipe'
+        @ingredient = @model 'Couchbase.Ingredient'
+        @recipeIngredient = @model 'Couchbase.RecipeIngredient'
         @responseHeaders['Access-Control-Allow-Origin'] = '*'
         @responseHeaders['Access-Control-Allow-Headers'] = 'Content-Type'
         callback true

@@ -1,6 +1,5 @@
 version: "1.0.0"
 requestTimeout: 10000
-currentDataSource: "MySQL"
 bridges:
     myself:
         app: "sample"
@@ -12,6 +11,8 @@ dataSources:
         host: "localhost"
         port: "8091"
         bucket: "default"
+        n1qlHost: "localhost"
+        n1qlPort: "8093"
 
     MySQL:
         host: "10.40.10.1"

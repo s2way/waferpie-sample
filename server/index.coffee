@@ -1,3 +1,6 @@
+SegfaultHandler = require 'segfault_handler'
+SegfaultHandler.registerHandler();
+
 WaferPie = require 'waferpie'
 wafer = new WaferPie
 wafer.configure 'config.yml'

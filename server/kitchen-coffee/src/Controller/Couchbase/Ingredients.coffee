@@ -72,12 +72,11 @@ class Ingredients
             )
             return
 
-        @ingredient.findAll(
-            callback: (error, results) =>
-                return callback(@handleError error) if error
-                callback
-                    count: results.length
-                    data: results
+        @ingredient.findAll({}, (error, results) =>
+            return callback(@handleError error) if error
+            callback
+                count: results.length
+                data: results
         )
 
 module.exports = Ingredients

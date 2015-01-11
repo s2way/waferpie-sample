@@ -20,8 +20,10 @@ class Ingredients
                 callback({})
             )
         else
-            @ingredient.removeById(id, (error) =>
-                return callback(@handleError error) if error
+            @ingredient.removeById(id:id, (error) =>
+                notFoundError = 13
+                if error.code isnt notFoundError
+                    return callback(@handleError error) if error
                 callback({})
             )
 
@@ -44,20 +46,16 @@ class Ingredients
             data = @payload
             data['id'] = id
 
-            @ingredient.save
-                data: data
-                callback: (error, result) =>
-                    return callback(@handleError error) if error
-                    callback result
+            @ingredient.save data: data, (error, result) =>
+                return callback(@handleError error) if error
+                callback result
 
     post: (callback) ->
         delete @payload['id']
-        @ingredient.save(
-            data: @payload,
-            callback: (error, data) =>
-                return callback(@handleError error) if error
-                @statusCode = 201
-                callback data
+        @ingredient.insert(data: @payload, (error, data) =>
+            return callback(@handleError error) if error
+            @statusCode = 201
+            callback data
         )
 
     get: (callback) ->

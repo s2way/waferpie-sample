@@ -5,7 +5,7 @@ class Log
             table: 'logs'
 
     save: (data, callback) ->
-        @_ninja.save 
+        @_ninja.save
             data : data
             callback : (err, data) ->
                 if err then callback(err) else callback(null, data)

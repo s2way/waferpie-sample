@@ -22,7 +22,7 @@ class Ingredients
         else
             @ingredient.removeById(id:id, (error) =>
                 notFoundError = 13
-                if error.code isnt notFoundError
+                if error and error.code isnt notFoundError
                     return callback(@handleError error) if error
                 callback({})
             )

@@ -7,7 +7,7 @@ describe 'Ingredients', ->
     testing = null
 
     beforeEach ->
-        testing = new Testing path.join(__dirname, '../../../kitchen-coffee/')
+        testing = new Testing path.join(__dirname, '../../../../kitchen-coffee/')
 
     describe 'get', ->
 
@@ -16,8 +16,8 @@ describe 'Ingredients', ->
             mock =
                 init: -> return
                 mocked: true
-                findAll: (params) ->
-                    params.callback(null, results)
+                findAll: (params, callback) ->
+                    callback(null, results)
 
             testing.mockModel 'Couchbase.Ingredient', mock
 
@@ -63,10 +63,10 @@ describe 'Ingredients', ->
                 init: -> return
                 findById: (id, callback) ->
                     callback(null, record)
-                save: (params) ->
+                save: (params, callback) ->
                     expect(params.data.id).to.be 1
                     expect(params.data.name).to.be 'Tomato'
-                    params.callback(null, record)
+                    callback(null, record)
 
             testing.mockModel 'Couchbase.Ingredient', mock
             testing.callController 'Couchbase.Ingredients', 'put',
@@ -110,9 +110,9 @@ describe 'Ingredients', ->
                 name: 'Tomato'
             mock =
                 init: -> return
-                save: (params) ->
+                insert: (params, callback) ->
                     expect(params.data).to.be record
-                    params.callback(null, {})
+                    callback(null, {})
 
             testing.mockModel 'Couchbase.Ingredient', mock
 
@@ -126,8 +126,8 @@ describe 'Ingredients', ->
         it 'should remove an ingredient by id if the it is supplied', (done) ->
             mock =
                 init: -> return
-                removeById: (id, callback) ->
-                    expect(id).to.be '1'
+                removeById: (params, callback) ->
+                    expect(params.id).to.be '1'
                     callback(null, {})
 
             testing.mockModel 'Couchbase.Ingredient', mock

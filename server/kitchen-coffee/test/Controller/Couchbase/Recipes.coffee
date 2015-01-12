@@ -7,7 +7,7 @@ describe 'Recipes', ->
     testing = null
 
     beforeEach ->
-        testing = new Testing path.join(__dirname, '../../../kitchen-coffee/')
+        testing = new Testing path.join(__dirname, '../../../../kitchen-coffee/')
 
     describe 'get', ->
 
@@ -18,8 +18,8 @@ describe 'Recipes', ->
                 mocked: true
                 query: (query, callback) ->
                     callback(null, [])
-                findAll: (params) ->
-                    params.callback(null, results)
+                findAll: (params, callback) ->
+                    callback(null, results)
 
             testing.mockModel 'Couchbase.Recipe', mock
 
@@ -67,10 +67,10 @@ describe 'Recipes', ->
                 init: -> return
                 findById: (id, callback) ->
                     callback(null, record)
-                save: (params) ->
+                save: (params, callback) ->
                     expect(params.data.id).to.be 1
                     expect(params.data.name).to.be 'Tomato'
-                    params.callback(null, record)
+                    callback(null, record)
 
             testing.mockModel 'Couchbase.Recipe', mock
             testing.callController 'Couchbase.Recipes', 'put',
@@ -112,12 +112,12 @@ describe 'Recipes', ->
                 quantity: 3
             mock =
                 init: -> return
-                save: (params) ->
+                save: (params, callback) ->
                     expect(params.data).to.eql
                         recipe_id: 1
                         ingredient_id: 2
                         quantity: 3
-                    params.callback(null, {})
+                    callback(null, {})
 
             options =
                 payload: record
@@ -145,9 +145,9 @@ describe 'Recipes', ->
                 name: 'Tomato'
             mock =
                 init: -> return
-                save: (params) ->
+                save: (params, callback) ->
                     expect(params.data).to.be record
-                    params.callback(null, {})
+                    callback(null, {})
 
             testing.mockModel 'Couchbase.Recipe', mock
 
@@ -162,12 +162,11 @@ describe 'Recipes', ->
         it 'should remove an ingredient by id if the it is supplied', (done) ->
             mock =
                 init: -> return
-                removeById: (id, callback) ->
-                    expect(id).to.be '1'
+                removeById: (params, callback) ->
+                    expect(params.id).to.be '1'
                     callback(null, {})
 
             testing.mockModel 'Couchbase.Recipe', mock
-
             testing.callController 'Couchbase.Recipes', 'delete', segments: ['1'], (body, info) ->
                 expect(body).to.be.ok()
                 expect(info.statusCode).to.be 200

@@ -30,7 +30,7 @@ class Recipe
         WHERE recipe_ingredient.recipe_id = ?''', [recipeId], callback
 
     findAllWithIngredients: (callback) ->
-        @findAll(callback: (error, recipes) =>
+        @findAll({}, (error, recipes) =>
             return callback(error) if error
 
             @query '''

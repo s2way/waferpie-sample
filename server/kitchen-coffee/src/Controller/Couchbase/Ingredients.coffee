@@ -73,7 +73,7 @@ class Ingredients
         @ingredient.findAll({}, (error, results) =>
             return callback(@handleError error) if error
             callback
-                count: results.length
+                count: results?.length
                 data: results
         )
 

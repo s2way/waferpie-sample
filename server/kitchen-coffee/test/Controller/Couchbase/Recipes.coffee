@@ -24,6 +24,7 @@ describe 'Recipes', ->
             testing.mockModel 'Couchbase.Recipe', mock
 
             testing.callController 'Couchbase.Recipes', 'get', {}, (body, info) ->
+                console.log body, info
                 expect(body.count).to.be 0
                 expect(body.data).to.be results
                 expect(info.statusCode).to.be 200

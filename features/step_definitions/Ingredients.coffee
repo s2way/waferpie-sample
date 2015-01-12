@@ -4,6 +4,10 @@ Loader = require('waferpie').Loader
 Ingredients = ->
 
     core =
+        dataSources:
+            default:
+                host: 'localhost'
+                port: '8091'
         bridges:
             sample :
                 host: 'localhost'
@@ -13,6 +17,8 @@ Ingredients = ->
     loader = new Loader('./', core)
     bridge = loader.createComponent('Bridge', 'sample')
     bridge.init()
+
+    couchbase = loader.createComponent('Database.Couchbase', '')
 
     @Given /^there are some ingredients$/, (callback) ->
 

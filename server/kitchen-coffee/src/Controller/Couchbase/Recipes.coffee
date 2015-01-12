@@ -38,7 +38,7 @@ class Recipes
                 ingredient_id: parseInt(ingredientId)
                 quantity: @payload.quantity
 
-            @recipeIngredient.save data: data, (error, data) =>
+            @recipeIngredient.insert data: data, (error, data) =>
                 return callback(@handleError error) if error
                 @statusCode = 201
                 callback data

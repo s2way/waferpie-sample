@@ -15,7 +15,6 @@ class Ingredient
             type: 'ingredients'
             keyPrefix: 'ingredients_'
             autoId: 'counter'
-            counterKey: 'counter'
         @_muffin.bind @
 
 module.exports = Ingredient

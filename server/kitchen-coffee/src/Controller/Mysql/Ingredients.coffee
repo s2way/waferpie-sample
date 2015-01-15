@@ -61,6 +61,8 @@ class Ingredients
         )
 
     get: (callback) ->
+        @component 'MyComponent'
+
         id = @segments[0]
         if id
             @ingredient.findById(id, (error, result) =>

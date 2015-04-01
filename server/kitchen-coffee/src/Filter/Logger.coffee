@@ -14,8 +14,7 @@ class Logger
             payload: JSON.stringify(@payload)
             params: JSON.stringify(@params)
 
-        log.save data, (error) ->
-            if error then callback(error : error) else callback()
-
+        #log.save data, (error) ->
+        callback()
 
 module.exports = Logger

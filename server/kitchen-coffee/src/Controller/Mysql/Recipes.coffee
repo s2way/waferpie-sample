@@ -2,8 +2,6 @@ class Recipes
     handleError: (error) ->
         return error: error, toString: error.toString()
 
-    timeout: ->
-
     before: (callback) ->
         @recipe = @model 'MySQL.Recipe'
         @ingredient = @model 'MySQL.Ingredient'
